@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Home - Postorama{% endblock %}
+
+{% block content %}
+<h1>Home</h1>
+
+{% for post in posts %}
+<br>
+<div class="card border-dark">
+    <div>
+        <div class="card-header">
+            <h4 class="card-title">{{ post.title }}</h4>
+            <a class="card-link" href="/users/{{ post.user.name }}">{{ post.user.name }}</a>
+
+        </div>
+
+        <div class="card-body">
+            <p class="card-text">{{ post.data }}</p>
+        </div>
+
+        <div class="card-footer">
+            <p class="card-text">{{ post.date.date() }}</p>
+        </div>
+    </div>
+</div>
+<br>
+
+<a class="btn btn-link" data-toggle="collapse" href="#comments-{{post.id}}" role="button" aria-expanded="false" aria-controls="comments-{{post.id}}">
+    <p class="if-not-collapsed">Hide comments</p>
+    <p class="if-collapsed">View comments</p>
+</a>
+
+<div class="collapse" id="comments-{{post.id}}">
+    <h3>Comments</h3>
+
+    {% if user.is_authenticated %}
+    <form method="POST" action="/comment/{{ post.id }}">
+        <textarea name="comment-text" id="comment-text" class="form-control"></textarea>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+
+    {% else %}
+    <button type="button" class="btn btn-primary" onclick="window.location.href='/login'">Sign in to comment</button>
+    {% endif %}
+
+    {% for comment in post.comments %}
+        <div class="card shadow-sm">
+
+            <div class="card-title">
+                <h5><a align="left" href="/users/{{comment.commenter.name}}">{{ comment.commenter.name }}</a> {{ comment.date_created.date() }} </h5>
+                <p>{{ comment.text }}</p>
+                {% if comment.user == user.id %}
+
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/delete-comment/{{ comment.id }}'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+                Delete
+                </button>
+
+                {% endif %}
+            </div>
+        </div>
+    <br>
+
+    {% endfor %}
+    
+    {% if not post.comments %}
+    <h5 class="text-muted">No comments</h5>
+    {% endif %}
+</div>
+
+{% endfor %}
+
+{% endblock %}
+
+{% block footer %}
+<p>
+    &copy;Dragon Rider Tech 2021. All rights reserved.<br>
+    Icon made by <a href="https://freepik.com" target="_blank">Freepik</a>
+</p>
+{% endblock %}

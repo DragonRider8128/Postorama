@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Login - Postorama{% endblock %}
+
+{% block content %}
+<form method="POST">
+  <h1>Login</h1>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+
+    </div>
+
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>
+<br>
+<a href="/sign-up">Don't have an account? Create one!</a>
+{% endblock %}
